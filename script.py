@@ -51,10 +51,6 @@ def main():
     end = time.time()
     # for stop in station_stops:
     #     print(stop)
-    print(updates)
-    print('Station name: ' + str(before_station_stops - before_station_name) + ', '
-          'Station stops: ' + str(before_trip_updates - before_station_stops) + ', '
-          'Trip updates: ' + str(end - before_trip_updates) + ', '
-          'Total: ', str(end - before_station_name))
+    print(updates, file='/home/alex/files/files/at-output.txt')
 
 main()
