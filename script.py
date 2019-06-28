@@ -51,6 +51,6 @@ def main():
     end = time.time()
     # for stop in station_stops:
     #     print(stop)
-    print(updates, file='/home/alex/files/files/at-output.txt')
+    print(updates, file=open('/home/alex/files/files/at-output.txt', 'a'))
 
 main()
