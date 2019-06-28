@@ -2,7 +2,7 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
 import os
 
-stop_name = 'Parnell Train Station'
+app_stop_name = 'Parnell Train Station'
 subscription_key = os.environ.get('AUCKLAND_TRANSPORT_SUBSCRIPTION_KEY')
 
 def request_at_json(path):
@@ -12,6 +12,10 @@ def request_at_json(path):
         conn = http.client.HTTPSConnection('api.at.govt.nz')
         conn.request("GET", path + "?%s" % params, "{body}", headers)
         response = conn.getresponse()
+        print(response)
+        print()
+        print()
+        print(response.read())
         json_data = json.loads(response.read())
         if (json_data['status'] == 'OK' and not json_data['error']):
             conn.close()
@@ -25,7 +29,7 @@ def request_at_json(path):
 def sort_departure_time(stop):
     return stop['departure_time']
 
-def get_stop_id():
+def get_stop_id(stop_name):
     all_stops_response = request_at_json('/v2/gtfs/stops')
     station = next((s for s in all_stops_response if s['stop_name'] == stop_name), None)
     return station['stop_id'] if station else None
@@ -46,7 +50,7 @@ def get_updates_for_stop_id(stop_id):
     return updates
 
 def main():
-    station_stop_id = get_stop_id()
+    station_stop_id = get_stop_id(app_stop_name)
     station_stops = get_stops_at_station(station_stop_id)
     updates = get_updates_for_stop_id(station_stop_id)
     # for stop in station_stops:
