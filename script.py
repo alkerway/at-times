@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 
 app_stop_name = 'Parnell Train Station'
 subscription_key = os.environ.get('AUCKLAND_TRANSPORT_SUBSCRIPTION_KEY')
@@ -41,11 +42,19 @@ def get_updates_for_stop_id(stop_id):
     return updates
 
 def main():
+    before_station_name = time.time()
     station_stop_id = get_stop_id(app_stop_name)
+    before_station_stops = time.time()
     station_stops = get_stops_at_station(station_stop_id)
+    before_trip_updates = time.time()
     updates = get_updates_for_stop_id(station_stop_id)
+    end = time.time()
     # for stop in station_stops:
     #     print(stop)
     print(updates)
+    print('Station name: ' + str(before_station_stops - before_station_name) + ', '
+          'Station stops: ' + str(before_trip_updates - before_station_stops) + ', '
+          'Trip updates: ' + str(end - before_trip_updates) + ', '
+          'Total: ', str(end - before_station_name))
 
 main()
