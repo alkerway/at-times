@@ -1,5 +1,4 @@
-import http.client, urllib.request, urllib.parse, urllib.error, base64
-import json
+import requests
 import os
 
 app_stop_name = 'Parnell Train Station'
@@ -8,21 +7,13 @@ subscription_key = os.environ.get('AUCKLAND_TRANSPORT_SUBSCRIPTION_KEY')
 def request_at_json(path):
     try:
         headers = {'Ocp-Apim-Subscription-Key': subscription_key}
-        params = urllib.parse.urlencode({ })
-        conn = http.client.HTTPSConnection('api.at.govt.nz')
-        conn.request("GET", path + "?%s" % params, "{body}", headers)
-        response = conn.getresponse()
-        print(response)
-        print()
-        print()
-        print(response.read())
-        json_data = json.loads(response.read())
+        params = {}
+        response = requests.get('https://api.at.govt.nz' + path, params=params, headers=headers)
+        json_data = response.json()
         if (json_data['status'] == 'OK' and not json_data['error']):
-            conn.close()
             return json_data['response']
         else:
             print('Error in response')
-        conn.close()
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
